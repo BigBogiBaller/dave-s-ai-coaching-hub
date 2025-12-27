@@ -1,7 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calendar } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const HeroSection = () => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
   const scrollToBooking = () => {
     const element = document.getElementById("booking");
     if (element) {
@@ -10,11 +17,15 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="min-h-screen flex items-center pt-20 gradient-hero">
+    <section className="min-h-screen flex items-center pt-20 gradient-hero overflow-hidden">
       <div className="container mx-auto px-4 py-16 md:py-24">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           {/* Text Content */}
-          <div className="space-y-8 animate-fade-in">
+          <div 
+            className={`space-y-8 transition-all duration-1000 ease-out ${
+              isLoaded ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"
+            }`}
+          >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium">
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse-soft" />
               Coaching & Beratung in Baden-Württemberg
@@ -33,7 +44,7 @@ const HeroSection = () => {
               <Button 
                 size="lg" 
                 onClick={scrollToBooking}
-                className="bg-primary hover:bg-primary/90 text-lg px-8 py-6 shadow-elevated"
+                className="bg-primary hover:bg-primary/90 text-lg px-8 py-6 shadow-elevated hover:scale-105 transition-transform duration-300"
               >
                 <Calendar className="mr-2 h-5 w-5" />
                 Kostenloses Erstgespräch
@@ -42,7 +53,7 @@ const HeroSection = () => {
                 size="lg" 
                 variant="outline"
                 onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}
-                className="text-lg px-8 py-6"
+                className="text-lg px-8 py-6 hover:scale-105 transition-transform duration-300"
               >
                 Mehr erfahren
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -69,8 +80,12 @@ const HeroSection = () => {
           </div>
 
           {/* Hero Image */}
-          <div className="relative animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-            <div className="aspect-[4/5] rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 overflow-hidden shadow-elevated">
+          <div 
+            className={`relative transition-all duration-1000 ease-out delay-300 ${
+              isLoaded ? "translate-x-0 opacity-100" : "translate-x-12 opacity-0"
+            }`}
+          >
+            <div className="aspect-[4/5] rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 overflow-hidden shadow-elevated hover:shadow-2xl transition-shadow duration-500">
               {/* Placeholder für Profilfoto */}
               <div className="w-full h-full flex items-center justify-center bg-secondary/50">
                 <div className="text-center p-8">
