@@ -83,8 +83,8 @@ const Footer = () => {
         <div className="pt-8 border-t border-background/10 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-background/60">
           <p>© {currentYear} Stabil im Wandel - David Ayemle. Alle Rechte vorbehalten.</p>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-background transition-colors">Impressum</a>
-            <a href="#" className="hover:text-background transition-colors">Datenschutz</a>
+            <a href="/impressum" className="hover:text-background transition-colors">Impressum</a>
+            <a href="/datenschutz" className="hover:text-background transition-colors">Datenschutz</a>
           </div>
         </div>
       </div>
