@@ -33,10 +33,10 @@ const BookingSection = () => {
   };
 
   const benefits = [
-    "30 Minuten unverbindliches Gespräch",
-    "Kennenlernen und Bedarfsklärung",
-    "Erste Impulse und Perspektiven",
-    "Entscheidungsgrundlage für Sie",
+    "Unverbindliches Kennenlerngespräch",
+    "Bedarfsklärung und erste Impulse",
+    "Gemeinsame Reise beginnen",
+    "Nachhaltige Veränderungen schaffen",
   ];
 
   return (
@@ -47,17 +47,20 @@ const BookingSection = () => {
           <AnimatedSection animation="fade-right">
             <div className="space-y-8">
               <div className="inline-block px-4 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
-                Jetzt starten
+                Jetzt kommt es auf Sie an
               </div>
               
               <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground">
-                Bereit für Veränderung?
+                Ihr Kontakt ist der Beginn einer erfolgreichen Reise
               </h2>
               
               <p className="text-muted-foreground text-lg leading-relaxed">
-                Der erste Schritt ist oft der wichtigste. In einem kostenlosen 
-                Erstgespräch lernen wir uns kennen und klären, wie ich Sie 
-                bestmöglich unterstützen kann.
+                Ich bin hier, um Sie auf Ihrem Weg zu unterstützen. Gemeinsam lassen wir 
+                die Transformation zu und schaffen nachhaltige Veränderungen.
+              </p>
+
+              <p className="text-primary font-medium text-xl">
+                Ich freue mich auf unsere gemeinsame Reise!
               </p>
 
               <ul className="space-y-4">
@@ -77,22 +80,29 @@ const BookingSection = () => {
 
               {/* Contact Info */}
               <div className="pt-8 border-t border-border space-y-4">
-                <h3 className="font-semibold text-foreground">Oder kontaktieren Sie mich direkt:</h3>
+                <h3 className="font-semibold text-foreground">Kontaktieren Sie mich direkt:</h3>
                 <div className="space-y-3">
                   <a 
-                    href="mailto:kontakt@stabilimwandel.com" 
+                    href="mailto:info@stabil-im-wandel.com" 
                     className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors group"
                   >
                     <Mail className="h-5 w-5 text-primary group-hover:scale-110 transition-transform" />
-                    kontakt@stabilimwandel.com
+                    info@stabil-im-wandel.com
                   </a>
-                  <div className="flex items-center gap-3 text-muted-foreground">
-                    <Phone className="h-5 w-5 text-primary" />
-                    Nach Vereinbarung
-                  </div>
-                  <div className="flex items-center gap-3 text-muted-foreground">
-                    <MapPin className="h-5 w-5 text-primary" />
-                    Baden-Württemberg, Deutschland
+                  <a 
+                    href="tel:+4915165248894"
+                    className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors group"
+                  >
+                    <Phone className="h-5 w-5 text-primary group-hover:scale-110 transition-transform" />
+                    +49 151 65248894
+                  </a>
+                  <div className="flex items-start gap-3 text-muted-foreground">
+                    <MapPin className="h-5 w-5 text-primary flex-shrink-0" />
+                    <div>
+                      Schulstrasse 8/4<br />
+                      74363 Güglingen<br />
+                      Deutschland
+                    </div>
                   </div>
                 </div>
               </div>
@@ -205,7 +215,7 @@ const BookingSection = () => {
 
                   <p className="text-xs text-muted-foreground text-center">
                     Mit dem Absenden stimmen Sie der Verarbeitung Ihrer Daten gemäß 
-                    unserer Datenschutzerklärung zu.
+                    unserer <a href="/datenschutz" className="text-primary hover:underline">Datenschutzerklärung</a> zu.
                   </p>
                 </form>
               )}
