@@ -1,32 +1,40 @@
 import { Button } from "@/components/ui/button";
-import { Briefcase, Users, RefreshCw, Compass, ArrowRight } from "lucide-react";
+import { User, Users, UsersRound, Building2, ArrowRight } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 
 const ServicesSection = () => {
   const services = [
     {
-      icon: Briefcase,
-      title: "Führungskräfte-Coaching",
-      description: "Individuelle Begleitung für Führungspersönlichkeiten, die ihre Wirksamkeit steigern und authentisch führen wollen.",
-      benefits: ["Stärkung der Führungskompetenz", "Klarheit in schwierigen Entscheidungen", "Work-Life-Balance"],
+      icon: User,
+      title: "Coaching für Persönlichkeitsbildung",
+      tagline: "Klarheit gewinnen. Potenziale entfalten. Ziele erreichen.",
+      description: "Das Paradoxon der Veränderung lautet: Erst wenn wir uns selbst annehmen, wie wir sind, können wir uns weiterentwickeln. Genau hier setze ich an – mit Empathie, Akzeptanz und echtem Einfühlungsvermögen begleite ich dich auf deinem Weg.",
+      details: "Im Einzel-Coaching entsteht ein geschützter Raum, in dem du dich selbst besser verstehen, innere Blockaden lösen und deine eigene innere Stärke entfalten kannst. Ob es um persönliche Entwicklung, berufliche Herausforderungen oder wichtige Entscheidungen geht – ich unterstütze dich dabei, Veränderungen nicht als Hindernis, sondern als Chance zu sehen.",
+      benefits: ["Mehr Klarheit", "Mehr Stabilität", "Mehr Vertrauen in die eigenen Fähigkeiten"],
     },
     {
       icon: Users,
-      title: "Team-Entwicklung & Supervision",
-      description: "Professionelle Begleitung für Teams, die ihre Zusammenarbeit verbessern und gemeinsam wachsen möchten.",
-      benefits: ["Verbesserte Kommunikation", "Konfliktlösung", "Gemeinsame Vision entwickeln"],
+      title: "Team Supervision",
+      tagline: "Reflexion. Entwicklung. Zusammenarbeit stärken.",
+      description: "In der Team-Supervision begleite ich Teams dabei, ihre Zusammenarbeit zu reflektieren, innere Dynamiken sichtbar zu machen und neue Perspektiven im Umgang mit Herausforderungen zu entwickeln.",
+      details: "Dabei entsteht ein Raum, in dem Offenheit und Vertrauen wachsen dürfen – Grundvoraussetzungen für Veränderung und gemeinsame Entwicklung. Ich unterstütze Teams darin, eigene Muster zu erkennen, Stärken zu würdigen und Blockaden zu lösen.",
+      benefits: ["Konstruktive Teamkultur", "Wachstum und Klarheit", "Flexibel und gestärkt"],
     },
     {
-      icon: RefreshCw,
-      title: "Veränderungsbegleitung",
-      description: "Unterstützung in Transformationsprozessen – für Organisationen und Einzelpersonen, die Wandel gestalten.",
-      benefits: ["Change-Management", "Resilienz aufbauen", "Neue Perspektiven gewinnen"],
+      icon: UsersRound,
+      title: "Kollegiale Fallberatung",
+      tagline: "Reflexion auf Augenhöhe. Souverän führen. Gemeinsam wachsen.",
+      description: "Führung bedeutet, Entscheidungen unter Unsicherheit zu treffen, Konflikte zu navigieren und den Blick für das Wesentliche zu behalten – oft unter großem Druck und mit wenig Raum zur eigenen Reflexion.",
+      details: "Ich begleite Gruppen von Führungskräften dabei, diesen Prozess professionell zu gestalten: mit klaren Rollen, methodischer Sicherheit und einer Atmosphäre, in der Vertrauen, Offenheit und gegenseitige Unterstützung wachsen können.",
+      benefits: ["Mehr Klarheit", "Mehr Sicherheit im Handeln", "Mehr Verbindung zu den eigenen Stärken"],
     },
     {
-      icon: Compass,
-      title: "Persönliche Lebensberatung",
-      description: "Ganzheitliche Begleitung für Menschen an Wendepunkten ihres Lebens – beruflich wie privat.",
-      benefits: ["Standortbestimmung", "Ziele definieren", "Potenziale entfalten"],
+      icon: Building2,
+      title: "Coaching und Beratung für Unternehmen",
+      tagline: "Organisationen weiterentwickeln. Kultur gestalten. Wandel begleiten.",
+      description: "In einer Welt, die sich rasant verändert, sind Stabilität und Anpassungsfähigkeit kein Widerspruch – sie bilden die Grundlage für langfristigen Erfolg. Unternehmen, die bereit sind, sich kontinuierlich weiterzuentwickeln, bleiben konkurrenzfähig, innovativ und widerstandsfähig.",
+      details: "Ich begleite Organisationen dabei, die nötigen Kompetenzen zu entwickeln, um Veränderung nicht als Störung, sondern als Gestaltungsraum zu begreifen. Durch eine wertschätzende, personenzentrierte Herangehensweise unterstütze ich Teams und Führungskräfte darin, innere Widerstände abzubauen und Klarheit in komplexen Situationen zu gewinnen.",
+      benefits: ["Offenheit und Eigenverantwortung", "Nachhaltiges Wachstum", "Bewusste Wandelgestaltung"],
     },
   ];
 
@@ -43,11 +51,12 @@ const ServicesSection = () => {
             Meine Leistungen
           </div>
           <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Professionelle Begleitung für nachhaltige Entwicklung
+            Widerstandsfähig – innovativ – erfolgreich
           </h2>
           <p className="text-muted-foreground text-lg">
-            Ob als Führungskraft, im Team oder persönlich – ich unterstütze Sie dabei, 
-            Ihre Ziele zu erreichen und Herausforderungen zu meistern.
+            Ich begleite Organisationen dabei, Stabilität und Anpassungsfähigkeit zu vereinen – 
+            für nachhaltigen Erfolg. Gemeinsam schaffen wir eine Kultur, in der Wandel bewusst 
+            gestaltet und Chancen aktiv genutzt werden.
           </p>
         </AnimatedSection>
 
@@ -55,39 +64,47 @@ const ServicesSection = () => {
         <div className="grid md:grid-cols-2 gap-8">
           {services.map((service, index) => (
             <AnimatedSection key={service.title} animation="fade-up" delay={index * 100}>
-              <div className="group p-8 rounded-2xl bg-card border border-border hover:border-primary/30 hover:shadow-elevated hover:-translate-y-2 transition-all duration-500 h-full">
-                <div className="flex items-start gap-6">
+              <div className="group p-8 rounded-2xl bg-card border border-border hover:border-primary/30 hover:shadow-elevated hover:-translate-y-2 transition-all duration-500 h-full flex flex-col">
+                <div className="flex items-start gap-6 mb-4">
                   <div className="w-14 h-14 rounded-xl bg-primary/10 group-hover:bg-primary group-hover:scale-110 flex items-center justify-center flex-shrink-0 transition-all duration-300">
                     <service.icon className="h-7 w-7 text-primary group-hover:text-primary-foreground transition-colors" />
                   </div>
                   
                   <div className="flex-1">
-                    <h3 className="font-display text-xl font-semibold text-foreground mb-3">
+                    <h3 className="font-display text-xl font-semibold text-foreground mb-1">
                       {service.title}
                     </h3>
-                    <p className="text-muted-foreground mb-4">
-                      {service.description}
+                    <p className="text-primary font-medium text-sm">
+                      {service.tagline}
                     </p>
-                    
-                    <ul className="space-y-2 mb-6">
-                      {service.benefits.map((benefit) => (
-                        <li key={benefit} className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-                          {benefit}
-                        </li>
-                      ))}
-                    </ul>
-                    
-                    <Button 
-                      variant="ghost" 
-                      className="group/btn p-0 h-auto text-primary hover:text-primary/80"
-                      onClick={scrollToBooking}
-                    >
-                      Mehr erfahren
-                      <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-                    </Button>
                   </div>
                 </div>
+                
+                <p className="text-muted-foreground mb-4">
+                  {service.description}
+                </p>
+                
+                <p className="text-muted-foreground text-sm mb-4 flex-grow">
+                  {service.details}
+                </p>
+                
+                <ul className="space-y-2 mb-6">
+                  {service.benefits.map((benefit) => (
+                    <li key={benefit} className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                      {benefit}
+                    </li>
+                  ))}
+                </ul>
+                
+                <Button 
+                  variant="ghost" 
+                  className="group/btn p-0 h-auto text-primary hover:text-primary/80 self-start"
+                  onClick={scrollToBooking}
+                >
+                  Erstgespräch vereinbaren
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                </Button>
               </div>
             </AnimatedSection>
           ))}

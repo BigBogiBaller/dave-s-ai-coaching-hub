@@ -1,7 +1,8 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { MessageCircle, X, Send, Mic, MicOff, Volume2, Loader2 } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { MessageCircle, X, Send, Volume2, VolumeX, Loader2 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Message {
@@ -12,25 +13,58 @@ interface Message {
 
 const VoiceAssistant = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "welcome",
-      role: "assistant",
-      content: "Hallo! Ich bin Davids digitaler Assistent. Wie kann ich Ihnen helfen? Sie können mich fragen zu:\n\n• Coaching für Führungskräfte\n• Team-Entwicklung\n• Terminvereinbarung\n• Allgemeine Fragen",
-    },
-  ]);
+  const [hasGreeted, setHasGreeted] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [voiceEnabled, setVoiceEnabled] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const chunksRef = useRef<Blob[]>([]);
+  const greetingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
   const TTS_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/text-to-speech`;
 
+  // Auto-greeting after 5 seconds
+  useEffect(() => {
+    if (!hasGreeted) {
+      greetingTimeoutRef.current = setTimeout(() => {
+        setIsOpen(true);
+        setHasGreeted(true);
+        setMessages([
+          {
+            id: "greeting",
+            role: "assistant",
+            content: "Hallo und herzlich willkommen! 👋\n\nIch bin Davids digitaler Assistent. Wie geht es Ihnen heute? Haben Sie Fragen zu Coaching, Teamentwicklung oder möchten Sie ein kostenloses Erstgespräch vereinbaren?\n\nIch bin hier, um Ihnen zu helfen!",
+          },
+        ]);
+      }, 5000);
+    }
+
+    return () => {
+      if (greetingTimeoutRef.current) {
+        clearTimeout(greetingTimeoutRef.current);
+      }
+    };
+  }, [hasGreeted]);
+
+  // Initialize with greeting when opened manually
+  useEffect(() => {
+    if (isOpen && messages.length === 0 && !hasGreeted) {
+      setHasGreeted(true);
+      setMessages([
+        {
+          id: "greeting",
+          role: "assistant",
+          content: "Hallo und herzlich willkommen! 👋\n\nIch bin Davids digitaler Assistent. Wie geht es Ihnen heute? Haben Sie Fragen zu Coaching, Teamentwicklung oder möchten Sie ein kostenloses Erstgespräch vereinbaren?\n\nIch bin hier, um Ihnen zu helfen!",
+        },
+      ]);
+    }
+  }, [isOpen, messages.length, hasGreeted]);
+
   const playAudio = async (text: string) => {
+    if (!voiceEnabled) return;
+    
     try {
       setIsSpeaking(true);
       const response = await fetch(TTS_URL, {
@@ -106,63 +140,22 @@ const VoiceAssistant = () => {
 
       setMessages((prev) => [...prev, assistantMessage]);
       
-      // Play audio for the response
-      playAudio(data.response);
+      // Play audio only if voice is enabled
+      if (voiceEnabled) {
+        playAudio(data.response);
+      }
     } catch (error) {
       console.error("Chat error:", error);
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: "Entschuldigung, es gab einen Fehler. Bitte versuchen Sie es erneut oder kontaktieren Sie David direkt unter kontakt@stabilimwandel.com",
+        content: "Entschuldigung, es gab einen Fehler. Bitte versuchen Sie es erneut oder kontaktieren Sie David direkt unter info@stabil-im-wandel.com",
       };
       setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
-  }, [messages, isLoading]);
-
-  const startRecording = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
-      mediaRecorderRef.current = mediaRecorder;
-      chunksRef.current = [];
-
-      mediaRecorder.ondataavailable = (e) => {
-        if (e.data.size > 0) {
-          chunksRef.current.push(e.data);
-        }
-      };
-
-      mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(chunksRef.current, { type: "audio/webm" });
-        stream.getTracks().forEach((track) => track.stop());
-        
-        // For now, just show a message that voice input was received
-        // Voice-to-text would require additional setup
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: Date.now().toString(),
-            role: "assistant",
-            content: "Sprachnachricht empfangen. Die Spracherkennung wird eingerichtet. Bitte nutzen Sie vorerst die Texteingabe.",
-          },
-        ]);
-      };
-
-      mediaRecorder.start();
-      setIsRecording(true);
-    } catch (error) {
-      console.error("Recording error:", error);
-    }
-  };
-
-  const stopRecording = () => {
-    if (mediaRecorderRef.current && isRecording) {
-      mediaRecorderRef.current.stop();
-      setIsRecording(false);
-    }
-  };
+  }, [messages, isLoading, voiceEnabled]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -193,21 +186,44 @@ const VoiceAssistant = () => {
         )}
       </button>
 
+      {/* Notification dot when not opened */}
+      {!isOpen && hasGreeted && messages.length > 0 && (
+        <div className="fixed bottom-20 right-6 z-50 animate-bounce">
+          <div className="w-3 h-3 rounded-full bg-accent" />
+        </div>
+      )}
+
       {/* Chat Window */}
       {isOpen && (
         <div className="fixed bottom-24 right-6 z-50 w-[380px] max-w-[calc(100vw-48px)] bg-card rounded-2xl shadow-elevated border border-border animate-slide-in-right overflow-hidden">
           {/* Header */}
           <div className="bg-primary text-primary-foreground p-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center">
-                <span className="font-display font-bold">DA</span>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center">
+                  <span className="font-display font-bold">DA</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold">Davids Assistent</h3>
+                  <p className="text-xs text-primary-foreground/80 flex items-center gap-1">
+                    {isSpeaking && <Volume2 className="h-3 w-3 animate-pulse" />}
+                    {isSpeaking ? "Spricht..." : "Online"}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-semibold">Davids Assistent</h3>
-                <p className="text-xs text-primary-foreground/80 flex items-center gap-1">
-                  {isSpeaking && <Volume2 className="h-3 w-3 animate-pulse" />}
-                  {isSpeaking ? "Spricht..." : "Online • Mit Sprachausgabe"}
-                </p>
+              
+              {/* Voice Toggle */}
+              <div className="flex items-center gap-2">
+                {voiceEnabled ? (
+                  <Volume2 className="h-4 w-4" />
+                ) : (
+                  <VolumeX className="h-4 w-4 opacity-60" />
+                )}
+                <Switch
+                  checked={voiceEnabled}
+                  onCheckedChange={setVoiceEnabled}
+                  className="data-[state=checked]:bg-primary-foreground/30"
+                />
               </div>
             </div>
           </div>
@@ -252,15 +268,15 @@ const VoiceAssistant = () => {
             </button>
             <button
               onClick={scrollToBooking}
-              className="flex-shrink-0 px-3 py-1.5 text-xs bg-secondary hover:bg-secondary/80 rounded-full transition-colors"
+              className="flex-shrink-0 px-3 py-1.5 text-xs bg-accent text-accent-foreground hover:bg-accent/80 rounded-full transition-colors"
             >
-              Termin buchen
+              Erstgespräch buchen
             </button>
             <button
-              onClick={() => sendMessage("Wie läuft ein Erstgespräch ab?")}
+              onClick={() => sendMessage("Erzähl mir mehr über David")}
               className="flex-shrink-0 px-3 py-1.5 text-xs bg-secondary hover:bg-secondary/80 rounded-full transition-colors"
             >
-              Erstgespräch
+              Über David
             </button>
           </div>
 
@@ -274,19 +290,15 @@ const VoiceAssistant = () => {
                 className="flex-1"
                 disabled={isLoading}
               />
-              <Button
-                type="button"
-                size="icon"
-                variant={isRecording ? "destructive" : "outline"}
-                onClick={isRecording ? stopRecording : startRecording}
-                disabled={isLoading}
-              >
-                {isRecording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
-              </Button>
               <Button type="submit" size="icon" disabled={isLoading || !inputValue.trim()}>
                 <Send className="h-4 w-4" />
               </Button>
             </div>
+            {voiceEnabled && (
+              <p className="text-xs text-muted-foreground mt-2 text-center">
+                🔊 Sprachausgabe aktiviert
+              </p>
+            )}
           </form>
         </div>
       )}

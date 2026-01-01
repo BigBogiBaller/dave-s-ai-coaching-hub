@@ -36,11 +36,12 @@ const Impressum = () => {
                   Angaben gemäß § 5 TMG
                 </h2>
                 <address className="not-italic text-muted-foreground">
+                  <p className="mb-2 font-semibold text-foreground">Stabil im Wandel</p>
                   <p className="mb-2">David Ayemle</p>
-                  <p className="mb-2">Stabil im Wandel – Coaching & Beratung</p>
-                  <p className="mb-2">[Straße und Hausnummer]</p>
-                  <p className="mb-2">[PLZ Ort]</p>
-                  <p>Baden-Württemberg, Deutschland</p>
+                  <p className="mb-2">Coaching & Beratung</p>
+                  <p className="mb-2">Schulstrasse 8/4</p>
+                  <p className="mb-2">74363 Güglingen</p>
+                  <p>Deutschland</p>
                 </address>
               </section>
 
@@ -49,8 +50,8 @@ const Impressum = () => {
                   Kontakt
                 </h2>
                 <div className="text-muted-foreground">
-                  <p className="mb-2">Telefon: [Telefonnummer nach Vereinbarung]</p>
-                  <p className="mb-2">E-Mail: kontakt@stabilimwandel.com</p>
+                  <p className="mb-2">Telefon: +49 151 65248894</p>
+                  <p className="mb-2">E-Mail: info@stabil-im-wandel.com</p>
                 </div>
               </section>
 
@@ -59,8 +60,7 @@ const Impressum = () => {
                   Berufsbezeichnung
                 </h2>
                 <p className="text-muted-foreground">
-                  Systemischer Coach und Berater<br />
-                  Zertifizierung: [Zertifizierungsstelle einfügen]<br />
+                  Zertifizierter Coach für Persönlichkeitsbildung<br />
                   Land der Verleihung: Deutschland
                 </p>
               </section>
@@ -71,7 +71,7 @@ const Impressum = () => {
                 </h2>
                 <p className="text-muted-foreground">
                   Umsatzsteuer-Identifikationsnummer gemäß § 27a Umsatzsteuergesetz:<br />
-                  [USt-IdNr. einfügen oder "Kleinunternehmer gemäß § 19 UStG"]
+                  Kleinunternehmer gemäß § 19 UStG
                 </p>
               </section>
 
@@ -81,7 +81,8 @@ const Impressum = () => {
                 </h2>
                 <p className="text-muted-foreground">
                   David Ayemle<br />
-                  [Adresse wie oben]
+                  Schulstrasse 8/4<br />
+                  74363 Güglingen
                 </p>
               </section>
 

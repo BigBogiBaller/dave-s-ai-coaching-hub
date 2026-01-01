@@ -1,4 +1,4 @@
-import { Linkedin, Mail, Phone } from "lucide-react";
+import { Linkedin, Mail, Phone, MapPin } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -17,9 +17,12 @@ const Footer = () => {
                 Stabil im Wandel
               </span>
             </div>
+            <p className="text-background/70 mb-2 font-semibold">
+              David Ayemle
+            </p>
             <p className="text-background/70 mb-6 max-w-md">
-              Professionelles Coaching und Beratung für Führungskräfte und Teams 
-              in Baden-Württemberg. Gemeinsam gestalten wir nachhaltige Veränderung.
+              Coaching & Beratung für Führungskräfte und Teams. 
+              Transformation zulassen und gestalten – dabei Potentiale entfalten.
             </p>
             <div className="flex gap-4">
               <a 
@@ -27,12 +30,14 @@ const Footer = () => {
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-background/10 hover:bg-background/20 flex items-center justify-center transition-colors"
+                aria-label="LinkedIn Profil"
               >
                 <Linkedin className="h-5 w-5" />
               </a>
               <a 
-                href="mailto:kontakt@stabilimwandel.com"
+                href="mailto:info@stabil-im-wandel.com"
                 className="w-10 h-10 rounded-full bg-background/10 hover:bg-background/20 flex items-center justify-center transition-colors"
+                aria-label="E-Mail senden"
               >
                 <Mail className="h-5 w-5" />
               </a>
@@ -63,17 +68,23 @@ const Footer = () => {
             <h4 className="font-semibold mb-4">Kontakt</h4>
             <ul className="space-y-3 text-background/70">
               <li className="flex items-center gap-2">
-                <Mail className="h-4 w-4" />
-                <a href="mailto:kontakt@stabilimwandel.com" className="hover:text-background transition-colors">
-                  kontakt@stabilimwandel.com
+                <Mail className="h-4 w-4 flex-shrink-0" />
+                <a href="mailto:info@stabil-im-wandel.com" className="hover:text-background transition-colors">
+                  info@stabil-im-wandel.com
                 </a>
               </li>
               <li className="flex items-center gap-2">
-                <Phone className="h-4 w-4" />
-                <span>Nach Vereinbarung</span>
+                <Phone className="h-4 w-4 flex-shrink-0" />
+                <a href="tel:+4915165248894" className="hover:text-background transition-colors">
+                  +49 151 65248894
+                </a>
               </li>
-              <li>
-                Baden-Württemberg, Deutschland
+              <li className="flex items-start gap-2">
+                <MapPin className="h-4 w-4 flex-shrink-0 mt-0.5" />
+                <span>
+                  Schulstrasse 8/4<br />
+                  74363 Güglingen
+                </span>
               </li>
             </ul>
           </div>
