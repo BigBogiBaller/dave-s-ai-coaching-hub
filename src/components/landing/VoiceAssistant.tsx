@@ -2,8 +2,9 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { MessageCircle, X, Send, Volume2, VolumeX, Loader2 } from "lucide-react";
+import { X, Send, Volume2, VolumeX, Loader2 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import chatbotAvatar from "@/assets/chatbot-avatar.png";
 
 interface Message {
   id: string;
@@ -175,14 +176,18 @@ const VoiceAssistant = () => {
       {/* Chat Widget Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full shadow-elevated flex items-center justify-center transition-all duration-300 ${
-          isOpen ? "bg-foreground text-background" : "bg-primary text-primary-foreground"
+        className={`fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full shadow-elevated flex items-center justify-center transition-all duration-300 overflow-hidden ${
+          isOpen ? "bg-foreground text-background" : "bg-white border-2 border-primary/30"
         }`}
       >
         {isOpen ? (
           <X className="h-6 w-6" />
         ) : (
-          <MessageCircle className="h-6 w-6" />
+          <img 
+            src={chatbotAvatar} 
+            alt="Chat mit Davids Assistent" 
+            className="w-full h-full object-cover"
+          />
         )}
       </button>
 
