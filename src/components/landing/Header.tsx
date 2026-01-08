@@ -45,9 +45,9 @@ const Header = () => {
     >
       <motion.nav
         className={`
-          w-full md:w-auto
+          w-full
           ${isScrolled 
-            ? "md:rounded-full md:shadow-lg md:border md:border-border/50 md:mt-4 md:px-6" 
+            ? "md:rounded-full md:shadow-lg md:border md:border-border/50 md:mt-4 md:mx-4" 
             : "border-b border-border"
           }
           bg-background/95 backdrop-blur-sm
