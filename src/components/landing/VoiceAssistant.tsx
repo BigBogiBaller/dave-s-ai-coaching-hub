@@ -5,6 +5,7 @@ import { Switch } from "@/components/ui/switch";
 import { X, Send, Volume2, VolumeX, Loader2 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import chatbotAvatar from "@/assets/chatbot-avatar.png";
+import chatHeaderAvatar from "@/assets/chat-header-avatar.png";
 
 interface Message {
   id: string;
@@ -205,8 +206,8 @@ const VoiceAssistant = () => {
           <div className="bg-primary text-primary-foreground p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center">
-                  <span className="font-display font-bold">DA</span>
+                <div className="w-10 h-10 rounded-full overflow-hidden">
+                  <img src={chatHeaderAvatar} alt="Davids Assistent" className="w-full h-full object-cover" />
                 </div>
                 <div>
                   <h3 className="font-semibold">Davids Assistent</h3>
