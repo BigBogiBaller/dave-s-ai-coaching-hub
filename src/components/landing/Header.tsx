@@ -1,96 +1,140 @@
+"use client";
+
+import * as React from "react";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "motion/react";
 import { Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import logo from "@/assets/logo.png";
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => setIsOpen(!isOpen);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     }
-    setIsMenuOpen(false);
+    setIsOpen(false);
   };
 
+  const navItems = [
+    { label: "Über mich", sectionId: "about" },
+    { label: "Leistungen", sectionId: "services" },
+    { label: "Referenzen", sectionId: "testimonials" },
+  ];
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
+    <motion.nav
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border"
+    >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="flex items-center"
+          >
             <img src={logo} alt="Stabil im Wandel" className="h-12 w-auto" />
-          </div>
+          </motion.div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-8">
-            <button 
-              onClick={() => scrollToSection("about")}
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Über mich
-            </button>
-            <button 
-              onClick={() => scrollToSection("services")}
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Leistungen
-            </button>
-            <button 
-              onClick={() => scrollToSection("testimonials")}
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Referenzen
-            </button>
-            <Button 
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="hidden md:flex items-center gap-8"
+          >
+            {navItems.map((item, index) => (
+              <motion.button
+                key={item.sectionId}
+                onClick={() => scrollToSection(item.sectionId)}
+                className="text-muted-foreground hover:text-foreground transition-colors relative group"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.1 * index }}
+              >
+                {item.label}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
+              </motion.button>
+            ))}
+          </motion.div>
+
+          {/* Desktop CTA Button */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="hidden md:block"
+          >
+            <Button
               onClick={() => scrollToSection("booking")}
               className="bg-primary hover:bg-primary/90"
             >
               Erstgespräch buchen
             </Button>
-          </nav>
+          </motion.div>
 
           {/* Mobile Menu Button */}
-          <button 
-            className="md:hidden p-2"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          <motion.button
+            className="md:hidden p-2 text-foreground"
+            onClick={toggleMenu}
+            whileTap={{ scale: 0.9 }}
           >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </motion.button>
         </div>
-
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <nav className="md:hidden pt-4 pb-2 flex flex-col gap-4 animate-fade-in">
-            <button 
-              onClick={() => scrollToSection("about")}
-              className="text-left text-muted-foreground hover:text-foreground transition-colors py-2"
-            >
-              Über mich
-            </button>
-            <button 
-              onClick={() => scrollToSection("services")}
-              className="text-left text-muted-foreground hover:text-foreground transition-colors py-2"
-            >
-              Leistungen
-            </button>
-            <button 
-              onClick={() => scrollToSection("testimonials")}
-              className="text-left text-muted-foreground hover:text-foreground transition-colors py-2"
-            >
-              Referenzen
-            </button>
-            <Button 
-              onClick={() => scrollToSection("booking")}
-              className="bg-primary hover:bg-primary/90 w-full"
-            >
-              Erstgespräch buchen
-            </Button>
-          </nav>
-        )}
       </div>
-    </header>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden bg-background border-b border-border overflow-hidden"
+          >
+            <div className="container mx-auto px-4 py-4 flex flex-col gap-4">
+              {navItems.map((item, i) => (
+                <motion.button
+                  key={item.sectionId}
+                  onClick={() => scrollToSection(item.sectionId)}
+                  className="text-left text-muted-foreground hover:text-foreground transition-colors py-2"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: 0.05 * i }}
+                >
+                  {item.label}
+                </motion.button>
+              ))}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.2 }}
+              >
+                <Button
+                  onClick={() => scrollToSection("booking")}
+                  className="bg-primary hover:bg-primary/90 w-full"
+                >
+                  Erstgespräch buchen
+                </Button>
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.nav>
   );
 };
 
