@@ -18,6 +18,12 @@ const HeroSection = () => {
   return <section className="min-h-screen flex items-center pt-20 gradient-hero overflow-hidden">
       <div className="container mx-auto px-4 py-16 md:py-24">
         <div className="grid md:grid-cols-2 gap-12 items-center">
+          {/* Hero Image - Mobile First */}
+          <div className={`relative md:hidden transition-all duration-1000 ease-out delay-300 ${isLoaded ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"}`}>
+            <div className="aspect-[4/5] rounded-2xl overflow-hidden shadow-elevated">
+              <img src={davidPhoto} alt="David Ayemle - Coach und Berater" className="w-full h-full object-cover object-top" />
+            </div>
+          </div>
           {/* Text Content */}
           <div className={`space-y-8 transition-all duration-1000 ease-out ${isLoaded ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"}`}>
             
@@ -65,7 +71,8 @@ const HeroSection = () => {
           </div>
 
           {/* Hero Image */}
-          <div className={`relative transition-all duration-1000 ease-out delay-300 ${isLoaded ? "translate-x-0 opacity-100" : "translate-x-12 opacity-0"}`}>
+          {/* Hero Image - Desktop Only */}
+          <div className={`relative hidden md:block transition-all duration-1000 ease-out delay-300 ${isLoaded ? "translate-x-0 opacity-100" : "translate-x-12 opacity-0"}`}>
             <div className="aspect-[4/5] rounded-2xl overflow-hidden shadow-elevated hover:shadow-2xl transition-shadow duration-500">
               <img src={davidPhoto} alt="David Ayemle - Coach und Berater" className="w-full h-full object-cover object-top" />
             </div>
