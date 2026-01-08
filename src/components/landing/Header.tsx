@@ -44,24 +44,18 @@ const Header = () => {
       className="fixed top-0 left-0 right-0 z-50 flex justify-center"
     >
       <motion.nav
-        animate={{
-          width: isScrolled ? "auto" : "100%",
-          marginTop: isScrolled ? 16 : 0,
-          paddingLeft: isScrolled ? 24 : 0,
-          paddingRight: isScrolled ? 24 : 0,
-        }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
         className={`
+          w-full md:w-auto
           ${isScrolled 
-            ? "md:rounded-full md:shadow-lg md:border md:border-border/50 shadow-sm" 
+            ? "md:rounded-full md:shadow-lg md:border md:border-border/50 md:mt-4 md:px-6" 
             : "border-b border-border"
           }
-          bg-background/95 backdrop-blur-sm w-full md:w-auto
+          bg-background/95 backdrop-blur-sm
         `}
       >
         <div className={`
           flex items-center justify-between gap-8
-          ${isScrolled ? "px-4 py-2 md:px-4" : "container mx-auto px-4 py-4"}
+          ${isScrolled ? "container mx-auto px-4 py-4 md:px-4 md:py-2" : "container mx-auto px-4 py-4"}
         `}>
           {/* Logo */}
           <motion.div
