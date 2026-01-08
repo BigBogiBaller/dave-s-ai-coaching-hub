@@ -1,4 +1,5 @@
 import { Linkedin, Mail, Phone, MapPin } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -9,13 +10,8 @@ const Footer = () => {
         <div className="grid md:grid-cols-4 gap-12 mb-12">
           {/* Brand */}
           <div className="md:col-span-2">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-background flex items-center justify-center">
-                <span className="font-display font-bold text-lg text-foreground">S</span>
-              </div>
-              <span className="font-display text-xl font-semibold">
-                Stabil im Wandel
-              </span>
+            <div className="flex items-center mb-4">
+              <img src={logo} alt="Stabil im Wandel" className="h-12 w-auto" />
             </div>
             <p className="text-background/70 mb-2 font-semibold">
               David Ayemle
