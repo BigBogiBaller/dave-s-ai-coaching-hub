@@ -23,13 +23,6 @@ const HeroSection = () => {
             <div className="aspect-[4/5] rounded-2xl overflow-hidden shadow-elevated">
               <img src={davidPhoto} alt="David Ayemle - Coach und Berater" className="w-full h-full object-cover object-top" />
             </div>
-            {/* Mobile CTA Button */}
-            <div className="mt-6">
-              <Button size="lg" onClick={scrollToBooking} className="w-full bg-primary hover:bg-primary/90 text-lg px-8 py-6 shadow-elevated hover:scale-105 transition-transform duration-300">
-                <Calendar className="mr-2 h-5 w-5" />
-                Kostenloses Erstgespräch
-              </Button>
-            </div>
           </div>
           {/* Text Content */}
           <div className={`space-y-8 transition-all duration-1000 ease-out ${isLoaded ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"}`}>
