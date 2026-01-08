@@ -53,15 +53,15 @@ const Header = () => {
         transition={{ duration: 0.3, ease: "easeInOut" }}
         className={`
           ${isScrolled 
-            ? "rounded-full shadow-lg border border-border/50" 
+            ? "md:rounded-full md:shadow-lg md:border md:border-border/50 shadow-sm" 
             : "border-b border-border"
           }
-          bg-background/95 backdrop-blur-sm
+          bg-background/95 backdrop-blur-sm w-full md:w-auto
         `}
       >
         <div className={`
           flex items-center justify-between gap-8
-          ${isScrolled ? "px-4 py-2" : "container mx-auto px-4 py-4"}
+          ${isScrolled ? "px-4 py-2 md:px-4" : "container mx-auto px-4 py-4"}
         `}>
           {/* Logo */}
           <motion.div
