@@ -27,9 +27,12 @@ const VoiceAssistant = () => {
   const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
   const TTS_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/text-to-speech`;
 
-  // Auto-greeting after 5 seconds
+  // Auto-greeting after 3 seconds on mobile, 5 seconds on desktop
   useEffect(() => {
     if (!hasGreeted) {
+      const isMobile = window.innerWidth < 768;
+      const greetingDelay = isMobile ? 3000 : 5000;
+      
       greetingTimeoutRef.current = setTimeout(() => {
         setIsOpen(true);
         setHasGreeted(true);
@@ -40,7 +43,7 @@ const VoiceAssistant = () => {
             content: "Hallo und herzlich willkommen! 👋\n\nIch bin Davids digitaler Assistent. Wie geht es Ihnen heute? Haben Sie Fragen zu Coaching, Teamentwicklung oder möchten Sie ein kostenloses Erstgespräch vereinbaren?\n\nIch bin hier, um Ihnen zu helfen!",
           },
         ]);
-      }, 5000);
+      }, greetingDelay);
     }
 
     return () => {
