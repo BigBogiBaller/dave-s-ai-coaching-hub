@@ -57,12 +57,13 @@ const Header = () => {
           flex items-center justify-between gap-8
           ${isScrolled ? "container mx-auto px-4 py-4 md:px-4 md:py-2" : "container mx-auto px-4 py-4"}
         `}>
-          {/* Logo */}
+        {/* Logo */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="flex items-center"
+            className="flex items-center cursor-pointer"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           >
             <motion.img 
               src={logo} 
