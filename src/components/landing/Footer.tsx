@@ -94,6 +94,19 @@ const Footer = () => {
             <a href="/datenschutz" className="hover:text-background transition-colors">Datenschutz</a>
           </div>
         </div>
+
+        {/* Made By */}
+        <div className="mt-6 text-center text-sm text-background/50">
+          <span>Made By </span>
+          <a 
+            href="https://bogdanlekic.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="font-bold hover:text-background transition-colors"
+          >
+            Bogi
+          </a>
+        </div>
       </div>
     </footer>
   );
