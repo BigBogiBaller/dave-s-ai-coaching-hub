@@ -102,7 +102,7 @@ const Footer = () => {
             href="https://bogdanlekic.com" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="font-bold hover:text-background transition-colors"
+            className="font-bold hover:text-background transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-[1px] after:bottom-0 after:left-0 after:bg-background after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left"
           >
             Bogi
           </a>
