@@ -49,17 +49,109 @@ WICHTIG:
 - Erwähne bei passender Gelegenheit das kostenlose Erstgespräch
 - Vermeide übertriebene Verkaufsgespräche - sei authentisch wie David`;
 
+// In-memory rate limiting (per function instance)
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+const RATE_LIMIT_WINDOW_MS = 60000; // 1 minute
+const MAX_REQUESTS_PER_WINDOW = 20; // 20 requests per minute per IP
+
+function getRateLimitKey(req: Request): string {
+  // Use client IP or fallback to a generic key
+  const forwarded = req.headers.get("x-forwarded-for");
+  const ip = forwarded ? forwarded.split(",")[0].trim() : "unknown";
+  return ip;
+}
+
+function isRateLimited(key: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(key);
+  
+  if (!entry || now > entry.resetTime) {
+    rateLimitMap.set(key, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
+    return false;
+  }
+  
+  if (entry.count >= MAX_REQUESTS_PER_WINDOW) {
+    return true;
+  }
+  
+  entry.count++;
+  return false;
+}
+
+interface Message {
+  role: "user" | "assistant";
+  content: string;
+}
+
+function validateMessages(messages: unknown): Message[] {
+  if (!Array.isArray(messages)) {
+    throw new Error("Messages must be an array");
+  }
+  
+  if (messages.length === 0) {
+    throw new Error("Messages array cannot be empty");
+  }
+  
+  if (messages.length > 50) {
+    throw new Error("Too many messages");
+  }
+  
+  return messages.map((msg, index) => {
+    if (typeof msg !== "object" || msg === null) {
+      throw new Error(`Invalid message at index ${index}`);
+    }
+    
+    const { role, content } = msg as Record<string, unknown>;
+    
+    if (!role || !["user", "assistant"].includes(role as string)) {
+      throw new Error(`Invalid message role at index ${index}`);
+    }
+    
+    if (typeof content !== "string") {
+      throw new Error(`Invalid message content at index ${index}`);
+    }
+    
+    // Limit content length to prevent token abuse
+    if (content.length > 2000) {
+      throw new Error(`Message at index ${index} exceeds maximum length of 2000 characters`);
+    }
+    
+    return { 
+      role: role as "user" | "assistant", 
+      content: content.trim() 
+    };
+  });
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { messages } = await req.json();
+    // Rate limiting check
+    const rateLimitKey = getRateLimitKey(req);
+    if (isRateLimited(rateLimitKey)) {
+      console.warn(`Rate limit exceeded for: ${rateLimitKey}`);
+      return new Response(
+        JSON.stringify({ error: "Zu viele Anfragen. Bitte versuchen Sie es später erneut." }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const body = await req.json();
+    
+    // Validate and sanitize input messages
+    const validatedMessages = validateMessages(body.messages);
+    
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {
-      throw new Error("LOVABLE_API_KEY is not configured");
+      console.error("LOVABLE_API_KEY is not configured");
+      return new Response(
+        JSON.stringify({ error: "Der Service ist vorübergehend nicht verfügbar." }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -72,7 +164,7 @@ serve(async (req) => {
         model: "google/gemini-2.5-flash",
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
-          ...messages,
+          ...validatedMessages,
         ],
       }),
     });
@@ -83,18 +175,22 @@ serve(async (req) => {
       
       if (response.status === 429) {
         return new Response(
-          JSON.stringify({ error: "Rate limit exceeded. Please try again later." }),
+          JSON.stringify({ error: "Zu viele Anfragen. Bitte versuchen Sie es später erneut." }),
           { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
       if (response.status === 402) {
         return new Response(
-          JSON.stringify({ error: "Payment required. Please add credits." }),
+          JSON.stringify({ error: "Der Service ist vorübergehend nicht verfügbar." }),
           { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
       
-      throw new Error(`AI gateway error: ${response.status}`);
+      // Log detailed error server-side, return generic message to client
+      return new Response(
+        JSON.stringify({ error: "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut." }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     const data = await response.json();
@@ -105,9 +201,16 @@ serve(async (req) => {
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
-    console.error("Chat function error:", error);
+    // Log detailed error server-side
+    console.error("Chat function error:", {
+      timestamp: new Date().toISOString(),
+      error: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+    
+    // Return generic message to client
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
+      JSON.stringify({ error: "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut." }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
